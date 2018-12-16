@@ -13,15 +13,29 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class App {
+    private boolean _isInteractive = true;
+    private String _path_nos = "";
+    private String _path_branches = "";
+    private String _path_output = "";
 
-    public App() {
+    public App(boolean isInteractive, String path_nos, String path_branches, String path_output) {
+        _isInteractive = isInteractive;
+        _path_nos = path_nos;
+        _path_branches = path_branches;
+        _path_output = path_output;
+
+        this.OpenWindow();
+    }
+
+    public void OpenWindow () {
         JFrame guiFrame = new JFrame();
+
         // make sure the program exits when the frame closes
         guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        guiFrame.setTitle("Example GUI");
-        guiFrame.setSize(300, 250);
-        // This will center the JFrame in the middle of the screen
-        guiFrame.setLocationRelativeTo(null);
+        guiFrame.setTitle("Grupo 6");
+        guiFrame.setSize(500, 500);
+        guiFrame.setLocationRelativeTo(null); // This will center the JFrame in the middle of the screen
+
         // Options for the JComboBox
         String[] mainOptions = { "Nodes", "Network" };
         // The first JPanel contains a JLabel and JCombobox
