@@ -6,7 +6,7 @@ import app;
 public class Main {
     /**
      * Example of entry: java -jar app.jar
-     * -t - k XXXX rs_nomedarede_nos.csv rs_nomedarede_ramos.csv,
+     * -t - k XXXX rs_nomedarede_nos.csv rs_nomedarede_ramos.csv
      * 
      * @param args
      */
@@ -31,9 +31,10 @@ public class Main {
             new App(isInteractive, pathNodes, pathBranches, pathOutput);
         }
         catch (Error err) {
+            System.out.println(err.getMessage());
             String suggetion = "Make sure you passed all the arguments in the right way." +
                 " The app should be called like that: java -jar app.jar -n nos.csv ramos.csv";
-            System.out.print(suggetion);
+            System.out.println(suggetion);
         }
     }
 }
