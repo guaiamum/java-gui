@@ -19,7 +19,9 @@ public class App implements ActionListener {
     JPanel mainPanel;
     JButton nodesFileButton, branchesFileButton;
     JTextArea log;
-    final JFileChooser fileChooser = new JFileChooser();
+    final JFileChooser fileChooser;
+    String[] navigationStack;
+    int currentPage;
 
     AppUtils utils;
 
@@ -30,13 +32,21 @@ public class App implements ActionListener {
         _path_output = path_output;
         utils = new AppUtils();
 
+        fileChooser = new JFileChooser();
         frame = this.createFrame();
         mainPanel = new JPanel();
 
         frame.add(mainPanel, BorderLayout.PAGE_START);
         frame.add(this.createLogger(), BorderLayout.CENTER);
 
-        this.navigateTo("main");
+        this.initNavigationStack();
+        this.navigateTo(navigationStack[0]);
+    }
+
+    private void initNavigationStack() {
+        navigationStack = new String[2];
+        navigationStack[0] = "main";
+        navigationStack[1] = "medidas";
     }
 
     private void navigateTo(String panel) {
@@ -44,9 +54,11 @@ public class App implements ActionListener {
 
         switch (panel) {
             case "medidas":
-                mainPanel.add(createMedidasMenu(), BorderLayout.CENTER);
+                currentPage = 1;
+                mainPanel.add(createMedidasMenu());
                 break;
             default:
+                currentPage = 0;
                 mainPanel.add(createMainMenu());
                 break;
         }
@@ -79,9 +91,10 @@ public class App implements ActionListener {
     }
 
     private JPanel createMedidasMenu() {
-        // Panel to contain buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(new JButton("WOWWW"));
+        buttonPanel.add(new JLabel("ESCOLHA O TIPO DE MEDIDA A SE FAZER"));
+        buttonPanel.add(new JButton("RAMOS"));
+        buttonPanel.add(new JButton("NOS"));
 
         return buttonPanel;
     }
@@ -95,8 +108,8 @@ public class App implements ActionListener {
         branchesFileButton = new JButton("Add branches file");
         branchesFileButton.addActionListener(this);
 
-        // Test
-        JButton butt = new JButton("Cenas");
+        // NEXT STEP
+        JButton butt = new JButton("NEXT");
         butt.addActionListener(this);
 
         // Panel to contain buttons
@@ -111,17 +124,25 @@ public class App implements ActionListener {
         return buttonPanel;
     }
 
+    private String getNextPage() {
+        try {
+            return this.navigationStack[currentPage + 1];
+        } catch (Error err) {
+            return "main";
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // Handle open button action.
         if (e.getSource() == nodesFileButton) {
             this._path_nodes = utils.getFile(fileChooser, nodesFileButton);
-            log.append("Opening: " + this._path_nodes + ".\n");
+            log.append("Node file selected: " + this._path_nodes + ".\n");
         } else if (e.getSource() == branchesFileButton) {
             this._path_branches = utils.getFile(fileChooser, nodesFileButton);
-            log.append("Opening: " + this._path_branches + ".\n");
-        } else {
-            this.navigateTo("medidas");
+            log.append("Branches file selected: " + this._path_branches + ".\n");
+        } else if (e.getActionCommand() == "NEXT") {
+            this.navigateTo(getNextPage());
         }
     }
 }
